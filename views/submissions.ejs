@@ -1,4 +1,5 @@
 <%- include("layout", { content: `
+
 <h1>Todas as Submissões</h1>
 
 <table>
@@ -9,6 +10,7 @@
         <th>Usuário</th>
         <th>Data</th>
     </tr>
+
     ${submissions.map(s => `
         <tr>
             <td>${s.nick}</td>
@@ -18,5 +20,7 @@
             <td>${new Date(s.timestamp).toLocaleString()}</td>
         </tr>
     `).join("")}
+
 </table>
+
 ` }) %>
