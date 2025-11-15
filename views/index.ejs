@@ -1,28 +1,53 @@
 <%- include("layout", { content: `
+
 <h1>KETSU Checker — Dashboard</h1>
 
 <div class="cards">
 
     <div class="card">
-        <h2>Total de Registros</h2>
+        <h3>Total de Registros</h3>
         <p class="big">${stats.total}</p>
     </div>
 
     <div class="card">
-        <h2>Por Servidor</h2>
-        ${Object.entries(stats.byServer).map(([s,v]) => `
-            <p><strong>${s}</strong>: ${v}</p>
-        `).join("")}
-    </div>
-
-    <div class="card">
-        <h2>Por Clan</h2>
-        ${Object.entries(stats.byClan).map(([c,v]) => `
-            <p><strong>${c}</strong>: ${v}</p>
-        `).join("")}
+        <h3>Registros Hoje</h3>
+        <p class="big">${stats.today}</p>
     </div>
 
 </div>
+
+<h2>Distribuição por Servidor</h2>
+<canvas id="serverChart"></canvas>
+
+<h2>Distribuição por Clan</h2>
+<canvas id="clanChart"></canvas>
+
+<script>
+const serverData = ${JSON.stringify(stats.byServer)};
+const clanData = ${JSON.stringify(stats.byClan)};
+
+new Chart(document.getElementById("serverChart"), {
+    type: "pie",
+    data: {
+        labels: Object.keys(serverData),
+        datasets: [{
+            data: Object.values(serverData),
+            borderWidth: 1
+        }]
+    }
+});
+
+new Chart(document.getElementById("clanChart"), {
+    type: "bar",
+    data: {
+        labels: Object.keys(clanData),
+        datasets: [{
+            data: Object.values(clanData),
+            borderWidth: 1
+        }]
+    }
+});
+</script>
 
 <h2>Últimas Submissões</h2>
 
@@ -44,6 +69,7 @@
             <td>${new Date(r.timestamp).toLocaleString()}</td>
         </tr>
     `).join("")}
+
 </table>
 
 ` }) %>
