@@ -1,48 +1,48 @@
-<%- include("layout") %>
-
+<%- include("layout", { content: `
 <h1>KETSU Checker — Dashboard</h1>
 
 <div class="cards">
 
     <div class="card">
         <h2>Total de Registros</h2>
-        <p class="big"><%= stats.total %></p>
+        <p class="big">${stats.total}</p>
     </div>
 
     <div class="card">
         <h2>Por Servidor</h2>
-        <% for (let s in stats.byServer) { %>
-            <p><strong><%= s %></strong>: <%= stats.byServer[s] %></p>
-        <% } %>
+        ${Object.entries(stats.byServer).map(([s,v]) => `
+            <p><strong>${s}</strong>: ${v}</p>
+        `).join("")}
     </div>
 
     <div class="card">
         <h2>Por Clan</h2>
-        <% for (let c in stats.byClan) { %>
-            <p><strong><%= c %></strong>: <%= stats.byClan[c] %></p>
-        <% } %>
+        ${Object.entries(stats.byClan).map(([c,v]) => `
+            <p><strong>${c}</strong>: ${v}</p>
+        `).join("")}
     </div>
 
 </div>
 
-<h2>Últimas 10 Submissões</h2>
+<h2>Últimas Submissões</h2>
 
 <table>
     <tr>
         <th>Nick</th>
         <th>Servidor</th>
         <th>Clan</th>
-        <th>Usuário Discord</th>
+        <th>Usuário</th>
         <th>Data</th>
     </tr>
 
-    <% recent.forEach(r => { %>
+    ${recent.map(r => `
         <tr>
-            <td><%= r.nick %></td>
-            <td><%= r.server %></td>
-            <td><%= r.clan %></td>
-            <td><%= r.username %></td>
-            <td><%= new Date(r.timestamp).toLocaleString() %></td>
+            <td>${r.nick}</td>
+            <td>${r.server}</td>
+            <td>${r.clan}</td>
+            <td>${r.username}</td>
+            <td>${new Date(r.timestamp).toLocaleString()}</td>
         </tr>
-    <% }) %>
+    `).join("")}
 </table>
+` }) %>
