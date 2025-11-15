@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV - Bot Discord</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 { color: #667eea; margin-bottom: 10px; }
+        nav { margin-top: 20px; }
+        nav a {
+            display: inline-block;
+            margin-right: 15px;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        button {
+            padding: 12px 24px;
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        button:hover { background: #3db8b0; }
+        .file-list {
+            list-style: none;
+        }
+        .file-item {
+            padding: 15px;
+            background: #f5f5f5;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .file-item a {
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .file-item a:hover { background: #5568d3; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📄 Arquivos CSV</h1>
+            <nav>
+                <a href="/">📊 Dashboard</a>
+                <a href="/logs">📝 Logs</a>
+                <a href="/csv">📄 CSV</a>
+            </nav>
+        </header>
+
+        <div class="content">
+            <button onclick="generateCSV()">🔄 Gerar Todos os CSVs</button>
+            <div id="message"></div>
+
+            <h2>Arquivos CSV Disponíveis</h2>
+            <ul class="file-list">
+                <% if (csvFiles.length === 0) { %>
+                    <li>Nenhum arquivo CSV encontrado. Clique em "Gerar Todos os CSVs" para criar.</li>
+                <% } else { %>
+                    <% csvFiles.forEach(file => { %>
+                        <li class="file-item">
+                            <span><%= file %></span>
+                            <a href="/csv/download/<%= file %>">⬇️ Baixar</a>
+                        </li>
+                    <% }); %>
+                <% } %>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        async function generateCSV() {
+            const messageDiv = document.getElementById('message');
+            messageDiv.innerHTML = 'Gerando CSVs...';
+            
+            try {
+                const response = await fetch('/csv/generate', { method: 'POST' });
+                const data = await response.json();
+                
+                if (data.success) {
+                    messageDiv.innerHTML = `✅ ${data.generated} arquivo(s) CSV gerado(s) com sucesso! Recarregue a página para ver.`;
+                    setTimeout(() => location.reload(), 2000);
+                } else {
+                    messageDiv.innerHTML = `❌ Erro: ${data.error}`;
+                }
+            } catch (error) {
+                messageDiv.innerHTML = `❌ Erro ao gerar CSVs: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+

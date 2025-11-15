@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logs - Bot Discord</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Courier New', monospace;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        header {
+            background: #2d2d2d;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        h1 { color: #4ecdc4; margin-bottom: 10px; }
+        nav a {
+            display: inline-block;
+            margin-right: 15px;
+            padding: 8px 15px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .log-selector {
+            background: #2d2d2d;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .log-selector select, .log-selector button {
+            padding: 8px 15px;
+            background: #3d3d3d;
+            color: #d4d4d4;
+            border: 1px solid #555;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+        .log-content {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #3d3d3d;
+            max-height: 600px;
+            overflow-y: auto;
+            font-size: 0.9em;
+            line-height: 1.6;
+        }
+        .log-line {
+            margin-bottom: 5px;
+            padding: 2px 0;
+        }
+        .log-info { color: #4ecdc4; }
+        .log-warn { color: #ffe66d; }
+        .log-error { color: #ff6b6b; }
+        .log-debug { color: #95a5a6; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📝 Logs do Sistema</h1>
+            <nav>
+                <a href="/">📊 Dashboard</a>
+                <a href="/logs">📝 Logs</a>
+                <a href="/csv">📄 CSV</a>
+            </nav>
+        </header>
+
+        <div class="log-selector">
+            <form method="GET" action="/logs">
+                <select name="date">
+                    <option value="">Log de Hoje</option>
+                    <% logFiles.forEach(file => { 
+                        const date = file.replace('bot_', '').replace('.log', '');
+                    %>
+                        <option value="<%= date %>" <%= selectedDate === date ? 'selected' : '' %>>
+                            <%= date %>
+                        </option>
+                    <% }); %>
+                </select>
+                <button type="submit">Carregar</button>
+            </form>
+        </div>
+
+        <div class="log-content">
+            <% if (logContent) { 
+                const lines = logContent.split('\n');
+                lines.forEach(line => {
+                    let className = 'log-line';
+                    if (line.includes('[ERROR]')) className += ' log-error';
+                    else if (line.includes('[WARN]')) className += ' log-warn';
+                    else if (line.includes('[DEBUG]')) className += ' log-debug';
+                    else className += ' log-info';
+            %>
+                <div class="<%= className %>"><%= line %></div>
+            <% }); 
+            } else { %>
+                <div>Nenhum log encontrado para esta data.</div>
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>
+
+
+
