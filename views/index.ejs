@@ -1,68 +1,48 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>KETSU Checker - Painel</title>
-  <link rel="stylesheet" href="/style.css">
-</head>
-<body>
-  <h1>KETSU Checker - Painel</h1>
+<%- include("layout") %>
 
-  <section class="stats">
+<h1>KETSU Checker — Dashboard</h1>
+
+<div class="cards">
+
     <div class="card">
-      <h2>Total Registros</h2>
-      <p><%= stats.total %></p>
+        <h2>Total de Registros</h2>
+        <p class="big"><%= stats.total %></p>
     </div>
+
     <div class="card">
-      <h2>Hoje</h2>
-      <p><%= stats.today %></p>
-    </div>
-    <div class="card">
-      <h2>Por Servidor</h2>
-      <ul>
+        <h2>Por Servidor</h2>
         <% for (let s in stats.byServer) { %>
-          <li><strong><%= s %></strong>: <%= stats.byServer[s] %></li>
+            <p><strong><%= s %></strong>: <%= stats.byServer[s] %></p>
         <% } %>
-      </ul>
     </div>
+
     <div class="card">
-      <h2>Por Clan</h2>
-      <ul>
+        <h2>Por Clan</h2>
         <% for (let c in stats.byClan) { %>
-          <li><strong><%= c %></strong>: <%= stats.byClan[c] %></li>
+            <p><strong><%= c %></strong>: <%= stats.byClan[c] %></p>
         <% } %>
-      </ul>
     </div>
-  </section>
 
-  <section>
-    <h2>Submissões Recentes</h2>
-    <table>
-      <thead>
+</div>
+
+<h2>Últimas 10 Submissões</h2>
+
+<table>
+    <tr>
+        <th>Nick</th>
+        <th>Servidor</th>
+        <th>Clan</th>
+        <th>Usuário Discord</th>
+        <th>Data</th>
+    </tr>
+
+    <% recent.forEach(r => { %>
         <tr>
-          <th>Data/Hora</th>
-          <th>Nick</th>
-          <th>Servidor</th>
-          <th>Clan</th>
-          <th>Usuário Discord</th>
+            <td><%= r.nick %></td>
+            <td><%= r.server %></td>
+            <td><%= r.clan %></td>
+            <td><%= r.username %></td>
+            <td><%= new Date(r.timestamp).toLocaleString() %></td>
         </tr>
-      </thead>
-      <tbody>
-        <% submissions.forEach(sub => { %>
-          <tr>
-            <td><%= new Date(sub.timestamp).toLocaleString("pt-BR") %></td>
-            <td><%= sub.nick %></td>
-            <td><%= sub.server %></td>
-            <td><%= sub.clan %></td>
-            <td><%= sub.username %></td>
-          </tr>
-        <% }) %>
-      </tbody>
-    </table>
-  </section>
-
-  <p>
-    <a href="/csv">⬇️ Baixar CSV completo</a> |
-    <a href="/api/stats" target="_blank">📡 Ver JSON /api/stats</a>
-  </p>
-</body>
-</html>
+    <% }) %>
+</table>
