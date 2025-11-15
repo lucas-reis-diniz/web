@@ -1,5 +1,4 @@
-<%- include("layout") %>
-
+<%- include("layout", { content: `
 <h1>Todas as Submissões</h1>
 
 <table>
@@ -7,17 +6,17 @@
         <th>Nick</th>
         <th>Servidor</th>
         <th>Clan</th>
-        <th>User</th>
+        <th>Usuário</th>
         <th>Data</th>
     </tr>
-
-    <% submissions.forEach(s => { %>
-    <tr>
-        <td><%= s.nick %></td>
-        <td><%= s.server %></td>
-        <td><%= s.clan %></td>
-        <td><%= s.username %></td>
-        <td><%= new Date(s.timestamp).toLocaleString() %></td>
-    </tr>
-    <% }) %>
+    ${submissions.map(s => `
+        <tr>
+            <td>${s.nick}</td>
+            <td>${s.server}</td>
+            <td>${s.clan}</td>
+            <td>${s.username}</td>
+            <td>${new Date(s.timestamp).toLocaleString()}</td>
+        </tr>
+    `).join("")}
 </table>
+` }) %>
