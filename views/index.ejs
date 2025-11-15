@@ -1,21 +1,68 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><%= title %></title>
-    <style>
-        body {
-            background: #0e0e10;
-            color: white;
-            font-family: Arial;
-            text-align: center;
-            padding-top: 50px;
-        }
-    </style>
+  <title>KETSU Checker - Painel</title>
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <h1><%= title %></h1>
-    <p><%= message %></p>
+  <h1>KETSU Checker - Painel</h1>
 
-    <a href="/ping" style="color:#0bf;">Testar API</a>
+  <section class="stats">
+    <div class="card">
+      <h2>Total Registros</h2>
+      <p><%= stats.total %></p>
+    </div>
+    <div class="card">
+      <h2>Hoje</h2>
+      <p><%= stats.today %></p>
+    </div>
+    <div class="card">
+      <h2>Por Servidor</h2>
+      <ul>
+        <% for (let s in stats.byServer) { %>
+          <li><strong><%= s %></strong>: <%= stats.byServer[s] %></li>
+        <% } %>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>Por Clan</h2>
+      <ul>
+        <% for (let c in stats.byClan) { %>
+          <li><strong><%= c %></strong>: <%= stats.byClan[c] %></li>
+        <% } %>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Submissões Recentes</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Data/Hora</th>
+          <th>Nick</th>
+          <th>Servidor</th>
+          <th>Clan</th>
+          <th>Usuário Discord</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% submissions.forEach(sub => { %>
+          <tr>
+            <td><%= new Date(sub.timestamp).toLocaleString("pt-BR") %></td>
+            <td><%= sub.nick %></td>
+            <td><%= sub.server %></td>
+            <td><%= sub.clan %></td>
+            <td><%= sub.username %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </section>
+
+  <p>
+    <a href="/csv">⬇️ Baixar CSV completo</a> |
+    <a href="/api/stats" target="_blank">📡 Ver JSON /api/stats</a>
+  </p>
 </body>
 </html>
