@@ -1,0 +1,23 @@
+<%- include("layout") %>
+
+<h1>Todas as Submissões</h1>
+
+<table>
+    <tr>
+        <th>Nick</th>
+        <th>Servidor</th>
+        <th>Clan</th>
+        <th>User</th>
+        <th>Data</th>
+    </tr>
+
+    <% submissions.forEach(s => { %>
+    <tr>
+        <td><%= s.nick %></td>
+        <td><%= s.server %></td>
+        <td><%= s.clan %></td>
+        <td><%= s.username %></td>
+        <td><%= new Date(s.timestamp).toLocaleString() %></td>
+    </tr>
+    <% }) %>
+</table>
